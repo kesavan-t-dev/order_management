@@ -1,0 +1,24 @@
+[project]
+name = "order-management"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "kesavan-t-dev",email = "kesavan.t@mitrahsoft.in"}
+]
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi (>=0.133.1,<0.134.0)",
+    "uvicorn (>=0.41.0,<0.42.0)",
+    "celery (>=5.6.2,<6.0.0)",
+    "redis (>=7.2.1,<8.0.0)",
+    "sqlalchemy (>=2.0.47,<3.0.0)",
+    "psycopg2-binary (>=2.9.11,<3.0.0)",
+    "pymssql (>=2.3.13,<3.0.0)",
+    "apscheduler (>=3.11.2,<4.0.0)",
+    "alembic (>=1.18.4,<2.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
