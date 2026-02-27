@@ -30,12 +30,4 @@ services:
   scheduler:
     build: .
     command: python scheduler_script.py
-<<<<<<< HEAD
-=======
-    depends_on:
-      - mssql_db
-      - postgres_db
 
-volumes:
-  pgdata:
->>>>>>> 87a0e2265d62fc3e7f55104d7679a40c7827bcad
