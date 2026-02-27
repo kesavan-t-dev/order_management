@@ -4,9 +4,10 @@ from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import os
-
+from dotenv import load_dotenv
 Base = declarative_base()
 
+load_dotenv()
 name = os.getenv("DB_USER", "World")
 print(name)
 
