@@ -2,12 +2,13 @@ from sqlalchemy import Column, String, Boolean, DateTime
 from datetime import datetime
 
 import uuid
-
+from sqlalchemy.dialects.postgresql import UUID
+from db import Base
 
 class Customer(Base):
     __tablename__ = 'customer'
 
-    id = Column(UUID, primary_key= True, default= uuid.uuid4)
+    id = Column(UUID(as_uuid=True), primary_key= True, default= uuid.uuid4)
     name = Column(String(256), nullable= False)
     email = Column(String(100), unique= True)
     number = Column(String(10), unique= True)
