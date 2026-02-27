@@ -21,14 +21,15 @@ services:
       - ./:/app
     env_file:
       - .env  
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     depends_on:
       redis:
         condition: service_healthy
+      - redis
 
   worker:
     build: .
@@ -57,5 +58,3 @@ services:
     depends_on:
       - redis
 
-volumes:
-  pgdata: 
