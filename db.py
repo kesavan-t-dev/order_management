@@ -1,11 +1,14 @@
-# from sqlalchemy.orm import declarative_base
-# from sqlalchemy.orm import Session
-# from typing import Generator
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm import Session
+from typing import Generator
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+import os
 
+Base = declarative_base()
 
-# Base = declarative_base()
+name = os.getenv("DB_USER", "World")
+print(name)
 
 
 # #DB Connection
