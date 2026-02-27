@@ -23,11 +23,12 @@ services:
 
   api:
     build: .
-    command: uvicorn main:app --host 127.0.0.1
+    working_dir: /app           
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 
     ports:
       - "8000:8000"
     volumes:
-      - ./project:/usr/src/app
+      - ./:/app
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
