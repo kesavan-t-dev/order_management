@@ -3,22 +3,17 @@ from sqlalchemy.orm import Session
 from typing import Generator
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-import os
 
 
-load_dotenv()
-db_url = os.getenv("url", "Not Found")
-# print(db_url)
+Base = declarative_base()
 
 
-# #DB Connection
+#DB Connection
 
-SQLALCHEMY_DATABASE_URL = db_url
+SQLALCHEMY_DATABASE_URL ="postgresql://postgres:root@localhost:5432/blog"
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
 
 #Create Session
 
@@ -28,3 +23,4 @@ def get_db():
         yield db
     finally:
         db.close()
+

@@ -26,6 +26,12 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - DATABASE_HOST=host.docker.internal
+      - DATABASE_PORT=5432
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=root
+      - DATABASE_NAME=test_db
+      - DATABASE_URL=postgresql://postgres:root@host.docker.internal:5432/test_db
     depends_on:
       redis:
         condition: service_healthy
