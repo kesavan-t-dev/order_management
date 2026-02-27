@@ -1,21 +1,4 @@
 services:
-  # postgres_db:
-  #   image: postgres:15
-  #   environment:
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: root
-  #     POSTGRES_DB: test_db
-  #   volumes:
-  #     - pgdata:/var/lib/postgresql/data
-
-  # mssql_db:
-  #   image: mcr.microsoft.com/mssql/server:2022-latest
-  #   environment:
-  #     ACCEPT_EULA: "Y"
-  #     MSSQL_SA_PASSWORD: "2026"
-  #   ports:
-  #     - "1433:1433"            
-
   redis:
     image: redis:alpine
     ports:
@@ -33,9 +16,7 @@ services:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
-      # - postgres_db
       - redis
-      # - mssql_db
 
   worker:
     build: .
@@ -45,15 +26,8 @@ services:
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
       - redis
-      # - mssql_db
-      # - postgres_db
 
   scheduler:
     build: .
     command: python scheduler_script.py
-    # depends_on:
-      # - mssql_db
-      # - postgres_db
 
-volumes:
-  pgdata:
