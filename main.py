@@ -1,8 +1,8 @@
 # main.py
-from fastapi import FastAPI
-
+from fastapi import FastAP
 # Create a FastAPI "instance"
 app = FastAPI()
+
 
 # Define a path operation decorator
 @app.get("/")
