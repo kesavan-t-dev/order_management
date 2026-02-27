@@ -1,5 +1,5 @@
 # Use a lightweight Python base image
-FROM python:3.14-slim
+FROM python:3.13.11-slim
 
 # Ensure logs are flushed immediately
 ENV PYTHONUNBUFFERED=1
