@@ -1,11 +1,10 @@
 from sqlalchemy import Column, String, Boolean, DateTime
 from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.ext.declarative import declarative_base
 from db import Base
 import uuid
 
-Base = declarative_base()
+
 
 class Product(Base):
     __tablename__ = 'product'
