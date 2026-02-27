@@ -15,7 +15,6 @@ services:
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
-      - DATABASE_URL=postgresql://postgres:2025@host.docker.internal:5432/order_management
     depends_on:
       - redis
 
