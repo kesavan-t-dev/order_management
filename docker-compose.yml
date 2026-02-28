@@ -20,7 +20,6 @@ services:
 >>>>>>> c9d9af8 (update the yml for the app)
     ports:
       - "8000:8000"
-    
     volumes:
       - ./:/app
 <<<<<<< HEAD
