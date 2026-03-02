@@ -25,8 +25,8 @@ WORKDIR /app
 # Copy dependency files first
 COPY pyproject.toml poetry.lock* ./
 
-# Install dependencies (This will install pymssql from your pyproject.toml)
-RUN poetry install --no-root --no-interaction --no-ansi
+# Install dependencies
+RUN poetry lock && poetry install --no-root --no-interaction --no-ansi
 
 # Copy the rest of the application
 COPY . .
