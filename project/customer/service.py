@@ -2,16 +2,18 @@ from .validation import *
 from .models import Customer
 from fastapi import  status, Response
 import uuid
-
+from project.olap.dim_customer.service import *
 def customer_list(db):
     try:
         customers = db.query(Customer).filter_by(is_active = True).all()
         if len(customers) > 0:
+            # await export()
             return {
                 "message": "list of customers",
                 "properties": customers,
                 "status_code" : 200
             }
+            
         return Response(content = 'No Customer exists', status_code = status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         print(e)
