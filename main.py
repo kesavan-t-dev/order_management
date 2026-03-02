@@ -3,9 +3,13 @@ from fastapi import FastAPI
 from project.customer.api import * 
 from project.product.api import * 
 from project.olap.dim_customer.api import *
+from project.orders.api import router as order_router
+from project.product.api import router as product_route
+from project.customer.models import Customer
+from project.product.models import Product
+from project.orders.models import Order, Order_items
 # Create a FastAPI "instance"
 # app = FastAPI()
-from project.product.api import router as product_route
 
 app = FastAPI(debug=True)
 
@@ -13,10 +17,6 @@ app.include_router(customer_route)
 app.include_router(router)
 # app.include_router(product_route)
 # app.include_router(order_route)
-from project.orders.api import router as order_router
-
-
-app = FastAPI()
 
 app.include_router(order_router, prefix="/order", tags=["Order"])
 
@@ -27,9 +27,4 @@ def read_root():
     """
     return {"Hello": "World"}
 
-@customer_route.get('/customer')
-def customer():
-    print('customer')
-    return get_customer()
-# app.include_router(report_route)
-app.include_router(product_route)
+
