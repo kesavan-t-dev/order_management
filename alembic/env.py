@@ -2,27 +2,19 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 
-# Import your SQLAlchemy Base and models
 from db import Base, connection_url
 from project.olap.models import Customer, Type, Orders, Product
 
-# Alembic Config object
 config = context.config
 config.set_main_option("sqlalchemy.url", connection_url)
 
-# Configure logging
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Metadata for 'autogenerate' support
 target_metadata = Base.metadata
 
 
 def run_migrations_offline() -> None:
-    """
-    Run migrations in 'offline' mode.
-    This configures the context with just a URL and not an Engine.
-    """
     url = config.get_main_option("sqlalchemy.url")
     context.configure(
         url=url,
@@ -36,10 +28,6 @@ def run_migrations_offline() -> None:
 
 
 def run_migrations_online() -> None:
-    """
-    Run migrations in 'online' mode.
-    This creates an Engine and associates a connection with the context.
-    """
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -56,7 +44,6 @@ def run_migrations_online() -> None:
             context.run_migrations()
 
 
-# Determine mode and run migrations
 if context.is_offline_mode():
     run_migrations_offline()
 else:
