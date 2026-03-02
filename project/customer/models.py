@@ -1,4 +1,3 @@
-from pydantic import ConfigDict
 from sqlalchemy import Column, String, Boolean, DateTime
 from datetime import datetime
 import uuid
