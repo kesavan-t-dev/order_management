@@ -9,7 +9,7 @@ import uuid
 class Product(Base):
     __tablename__ = 'product'
 
-    id = Column(UUID(as_uuid=True), primary_key= True, default= uuid.uuid4())
+    id = Column(UUID(as_uuid=True), primary_key= True, default= uuid.uuid4)
     name = Column(String(256), nullable= False)
     brand = Column(String(100))
     category = Column(String(100))
