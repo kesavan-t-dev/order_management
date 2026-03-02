@@ -7,6 +7,7 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 
 RUN apt-get update && apt-get install -y \
     curl \
+    gnupg2 \
     build-essential \
     libpq-dev \
     freetds-dev \
@@ -26,7 +27,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock* ./
 
 # Install dependencies
-RUN poetry lock && poetry install --no-root --no-interaction --no-ansi
+RUN poetry install --no-root --no-interaction --no-ansi
 
 # Copy the rest of the application
 COPY . .
