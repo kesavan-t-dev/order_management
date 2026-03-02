@@ -3,3 +3,8 @@
 __pycache__/
 *.pyc
 
+alembic.ini
+migrations/
+tests/
+alembic
+db.py

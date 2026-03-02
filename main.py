@@ -1,10 +1,12 @@
 # main.py
 from fastapi import FastAPI
+from project.orders.api import router as order_router
 
-# Create a FastAPI "instance"
+
 app = FastAPI()
 
-# Define a path operation decorator
+app.include_router(order_router, prefix="/order", tags=["Order"])
+
 @app.get("/")
 def read_root():
     """
