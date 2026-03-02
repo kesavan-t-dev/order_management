@@ -4,4 +4,3 @@ __pycache__/
 *.pyc
 alembic
 alembic.ini
-db.py
