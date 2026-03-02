@@ -16,3 +16,8 @@ def read_root():
     Handles GET requests to the root URL (/).
     """
     return {"Hello": "World"}
+
+@customer_route.get('/customer')
+def customer():
+    print('customer')
+    return get_customer()
