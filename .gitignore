@@ -5,4 +5,3 @@ __pycache__/
 alembic
 alembic.ini
 db
-order_management
