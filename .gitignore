@@ -2,9 +2,6 @@
 .env/
 __pycache__/
 *.pyc
-
-alembic.ini
-migrations/
-tests/
 alembic
+alembic.ini
 db.py
