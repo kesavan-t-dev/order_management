@@ -13,8 +13,13 @@ app.include_router(customer_route)
 app.include_router(router)
 # app.include_router(product_route)
 # app.include_router(order_route)
+from project.orders.api import router as order_router
 
-# Define a path operation decorator
+
+app = FastAPI()
+
+app.include_router(order_router, prefix="/order", tags=["Order"])
+
 @app.get("/")
 def read_root():
     """
