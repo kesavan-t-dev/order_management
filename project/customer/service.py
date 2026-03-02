@@ -47,6 +47,8 @@ def new_customer(db, customer):
             'city': new_customer.city,
             'zip': new_customer.zip,
         }
+        dim_create(new_customer.id, new_customer.name, new_customer.number)
+        
         return {"message": "customer created successfully", "properties": data, "status_code" : 200}
     except Exception as e:
         return Response(content=str(e), status_code=status.HTTP_400_BAD_REQUEST)
@@ -54,14 +56,25 @@ def new_customer(db, customer):
 def update_customer(id: uuid, payload: dict, db):
     try:
         customer = db.query(Customer).filter_by(id = id).first()
-        print(customer)
         if customer:
             update_data = payload.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 print(key, value)
                 setattr(customer, key, value)
             db.commit()
-            db.close()                  
+            db.refresh(customer)
+
+            if 'name' not in update_data:
+                name = customer.name 
+            else:
+                name = update_data['name']
+                
+            if 'number' not in update_data:
+                number = customer.number
+            else:
+                number = update_data['number']
+
+            dim_update(id, name, number)             
             return {
                 "message": "customer updated successfully",
                 "properties": update_data,
