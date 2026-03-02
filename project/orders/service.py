@@ -8,6 +8,8 @@ from project.olap.dim_order.service import sync_to_ssms
 
 def create_order(db, data):
     try:
+        
+
         new_order = Order(
             customer_id=data.customer_id,
             order_status="Order placed"
