@@ -1,5 +1,5 @@
 # main.py
-from fastapi import FastAP
+from fastapi import FastAPI
 # Create a FastAPI "instance"
 app = FastAPI()
 
