@@ -6,8 +6,8 @@ from db import get_db
 
 
 customer_route = APIRouter(
-    prefix= '/user',
-    tags= ['user'],
+    prefix= '/customer',
+    tags= ['customer'],
     responses={404: {"description": "Not found"}}
 )
 

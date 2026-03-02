@@ -6,7 +6,7 @@ from project.customer.api import *
 # app = FastAPI()
 app = FastAPI(debug=True)
 
-# app.include_router(customer_route)
+app.include_router(customer_route)
 # app.include_router(product_route)
 # app.include_router(order_route)
 
@@ -18,6 +18,7 @@ def read_root():
     """
     return {"Hello": "World"}
 
-# @app.get('/customer')
-# def customer():
-#     return get_customer()
+@customer_route.get('/customer')
+def customer():
+    print('customer')
+    return get_customer()

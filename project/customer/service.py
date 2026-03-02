@@ -5,4 +5,5 @@ import uuid
 
 
 def customer_list(db):
-    print(db)
+    print('hi')
+    return 'hi'

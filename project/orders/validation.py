@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.dialects.postgresql import UUID
 from typing import List, Optional
 import uuid
@@ -11,8 +11,7 @@ class Order_serializer(BaseModel):
     quantity : str
     total : str
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 class Order_update_serializer(BaseModel):
 
@@ -21,8 +20,7 @@ class Order_update_serializer(BaseModel):
     quantity : str | None = None
     total : str | None = None
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 class Order_response(BaseModel):
  
@@ -30,8 +28,7 @@ class Order_response(BaseModel):
     properties: List[Order_serializer] | None
     status_code: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 class Create_Order(BaseModel):
     
@@ -41,5 +38,4 @@ class Create_Order(BaseModel):
     quantity : str
     total : str
    
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)

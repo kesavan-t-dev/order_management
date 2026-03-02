@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy.dialects.postgresql import UUID
 from db import Base
 import uuid
-
+from pydantic import ConfigDict
 
 
 class Product(Base):
@@ -17,3 +17,5 @@ class Product(Base):
     created_at = Column(DateTime, default = datetime.now())
     update_at = Column(DateTime, default = datetime.now(), onupdate= datetime.now())
     is_active = Column(Boolean, default = True)
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)

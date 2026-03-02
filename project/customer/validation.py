@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.dialects.postgresql import UUID
 from typing import List, Optional
 import uuid
@@ -13,9 +13,9 @@ class Customer_serializer(BaseModel):
     city : str
     zip : str
 
-    class Config:
-        from_attributes = True
-
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
+    
 class Customer_update_serializer(BaseModel):
 
     name : str | None = None
@@ -24,18 +24,16 @@ class Customer_update_serializer(BaseModel):
     address : str | None = None
     city : str | None = None
     zip : str | None = None
+    model_config = ConfigDict(arbitrary_types_allowed=True)
     
-    class Config:
-        from_attributes = True
 
 class Customer_response(BaseModel):
  
     message: str 
     properties: List[Customer_serializer] | None
     status_code: int
-
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
 
 class Create_Customer(BaseModel):
     
@@ -46,6 +44,5 @@ class Create_Customer(BaseModel):
     address : str
     city : str
     zip : str 
-   
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+    
