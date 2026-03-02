@@ -2,6 +2,7 @@
 .env/
 __pycache__/
 *.pyc
-alembic
+alembic/
+CSV_Exports/
 alembic.ini
 db.py
