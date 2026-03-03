@@ -1,57 +1,59 @@
 services:
-  postgres_db:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: root
-      POSTGRES_DB: test_db
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-  mssql_db:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "2026"
-    ports:
-      - "1433:1433"            
-
   redis:
     image: redis:alpine
+    container_name: redis_broker
     ports:
       - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   api:
     build: .
-    command: uvicorn main:app --host 127.0.0.1
+    working_dir: /app            
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
     ports:
       - "8000:8000"
     volumes:
-      - ./project:/usr/src/app
+      - ./:/app
+    env_file:
+      - .env  
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
-      - postgres_db
-      - redis
-      - mssql_db
+      redis:
+        condition: service_healthy
 
   worker:
     build: .
+    working_dir: /app
     command: celery -A tasks worker --loglevel=info
+    volumes:
+      - ./:/app
+    env_file:
+      - .env 
     environment:
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     depends_on:
-      - redis
-      - postgres_db
+      redis:
+        condition: service_healthy
 
   scheduler:
     build: .
+    working_dir: /app
     command: python scheduler_script.py
+    volumes:
+      - ./:/app
+    env_file:
+      - .env 
     depends_on:
-      - mssql_db
-      - postgres_db
+      - redis
 
 volumes:
-  pgdata:
+  pgdata: 
