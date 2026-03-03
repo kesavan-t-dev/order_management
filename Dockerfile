@@ -7,7 +7,6 @@ ENV POETRY_VIRTUALENVS_CREATE=false
 
 RUN apt-get update && apt-get install -y \
     curl \
-    gnupg2 \
     build-essential \
     libpq-dev \
     freetds-dev \
@@ -26,7 +25,7 @@ WORKDIR /app
 # Copy dependency files first
 COPY pyproject.toml poetry.lock* ./
 
-# Install dependencies
+# Install dependencies (This will install pymssql from your pyproject.toml)
 RUN poetry install --no-root --no-interaction --no-ansi
 
 # Copy the rest of the application
