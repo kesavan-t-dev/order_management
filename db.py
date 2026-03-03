@@ -9,7 +9,7 @@ import os
 
 load_dotenv()
 db_url = os.getenv("url", "Not Found")
-print(db_url)
+# print(db_url)
 
 
 # #DB Connection
