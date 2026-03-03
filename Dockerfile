@@ -5,23 +5,15 @@ FROM python:3.13-slim
 ENV PYTHONUNBUFFERED=1
 ENV POETRY_VIRTUALENVS_CREATE=false
 
-# Install ALL system dependencies in one block
 RUN apt-get update && apt-get install -y \
     curl \
-    gnupg2 \
     build-essential \
     libpq-dev \
-    unixodbc-dev \
-    unixodbc \
-    g++ \
+    freetds-dev \
+    freetds-bin \
+    gcc \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Microsoft ODBC Driver for SQL Server (Correct for Debian 12/Bookworm)
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg \
-    && curl https://packages.microsoft.com/config/debian/12/prod.list > /etc/apt/sources.list.d/mssql-release.list \
-    && apt-get update \
-    && ACCEPT_EULA=Y apt-get install -y msodbcsql17 \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
@@ -33,11 +25,11 @@ WORKDIR /app
 # Copy dependency files first
 COPY pyproject.toml poetry.lock* ./
 
-# Install dependencies
+# Install dependencies (This will install pymssql from your pyproject.toml)
 RUN poetry install --no-root --no-interaction --no-ansi
 
 # Copy the rest of the application
 COPY . .
 
-# IMPORTANT: Change host to 0.0.0.0 so it is accessible outside the container
+# Change host to 0.0.0.0 so it is accessible outside the container
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
