@@ -1,41 +1,43 @@
+import pymssql
 import os
 import uuid
-import pyodbc
 from dotenv import load_dotenv
 from project.orders.models import Order
 
 load_dotenv()
 
-SSMS_CONN_STR = os.getenv("SSMS_CONNECTION_STRING")
-
-def sync_to_ssms(order_obj: Order):
-
+def sync_to_ssms(new_item, customer_id):
     conn = None
     try:
-        conn = pyodbc.connect(SSMS_CONN_STR)
+        conn = pymssql.connect(
+            server='host.docker.internal', 
+            port=1433,
+            user='sa2026',
+            password='2026',   
+            database='order_management',
+            timeout=5
+        )
         cursor = conn.cursor()
-
         insert_query = """
         INSERT INTO orders (id, customer_id, product_id, order_id, quantity, price, date)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s, %s, %s)
         """
-
-        for item in order_obj.items:
-            cursor.execute(insert_query, (
-                str(uuid.uuid4()),            
-                str(order_obj.customer_id),   
-                str(item.product_id),         
-                str(order_obj.id),            
-                str(item.quantity),           
-                str(item.total),              
-                order_obj.order_date          
-            ))
-
-        conn.commit()
-        print("Successfully synced to SSMS")
+        customer = str(customer_id)
         
+        row = (
+            str(uuid.uuid4()),            
+            customer, 
+            str(new_item.product_id),     
+            str(new_item.order_id),      
+            str(new_item.quantity),       
+            str(new_item.total),          
+            new_item.created_at          
+        )
+        cursor.execute(insert_query, row)
+        conn.commit()
+        print("Successfully synced to SSMS manually!")
     except Exception as e:
-        print(f"Failed to sync to SSMS: {str(e)}")
+        print(f"SSMS Error: {e}")
     finally:
         if conn:
             conn.close()
