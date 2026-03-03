@@ -99,11 +99,17 @@ def read_products(db):
     if len(posts) <= 0:
         raise HTTPException(status_code=404, detail="No product exists")
     
+
+    if len(posts) <= 0:
+        raise HTTPException(status_code=404, detail="No product exists")
+    
     users_data = []
     for u in posts:
         users_data.append({
             "name": u.name,
             "brand": u.brand,
+            "category":u.category,
+            "price" : u.price
             "category":u.category,
             "price" : u.price
         })
@@ -143,7 +149,12 @@ def update_products(item_id, update, db):
     if update.name == None and update.brand == None and update.category == None and update.price == None:
         raise HTTPException(status_code=404, detail="Enter values to update")
     
+    
+    if update.name == None and update.brand == None and update.category == None and update.price == None:
+        raise HTTPException(status_code=404, detail="Enter values to update")
+    
     if not db_item:
+        raise HTTPException(status_code=404, detail="Product not found")
         raise HTTPException(status_code=404, detail="Product not found")
 
     # Apply updates only for provided fields
