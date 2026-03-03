@@ -32,6 +32,7 @@ celery_app = Celery(
 # Auto-discover tasks from these modules
 celery_app.autodiscover_tasks([
    "app.product_worker",
-   "app.customer_worker"
+   "app.customer_worker",
+   "app.order_worker"
 ])
  #in product_worker i have post and patch endpoints 

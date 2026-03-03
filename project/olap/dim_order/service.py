@@ -30,8 +30,7 @@ def sync_to_ssms(new_item, customer_id):
             str(new_item.product_id),     
             str(new_item.order_id),      
             str(new_item.quantity),       
-            str(new_item.total),          
-            new_item.created_at          
+            str(new_item.total)          
         )
         cursor.execute(insert_query, row)
         conn.commit()

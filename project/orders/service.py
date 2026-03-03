@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from .models import Order, Order_items
 from project.olap.dim_order.service import sync_to_ssms
+from app.order_worker import insert_order_to_sql
 
 
 def create_order(db, data):
@@ -23,8 +24,14 @@ def create_order(db, data):
         db.add(new_item)
         db.commit() 
         db.refresh(new_order) 
-        sync_to_ssms(new_item, data.customer_id)
-        
+     
+        insert_order_to_sql.delay(
+            customer_id=data.customer_id,
+            product_id=data.product_id,
+            order_id=new_order.id,
+            quantity=data.quantity,
+            total=data.total
+        )
         return {
             "message": "Order created successfully",
             "status_code": 201,

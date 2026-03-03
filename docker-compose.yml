@@ -14,7 +14,6 @@ services:
     build: .
     working_dir: /app            
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
-
     ports:
       - "8000:8000"
     volumes:
@@ -29,7 +28,6 @@ services:
     depends_on:
       redis:
         condition: service_healthy
-      - redis
 
   worker:
     build: .
@@ -50,15 +48,13 @@ services:
   scheduler:
     build: .
     working_dir: /app
-    command: python scheduler_export.py 
+    command: python scheduler_export.py
     volumes:
       - ./:/app
-      - ./CSV_Exports:/app/CSV_Exports 
     env_file:
-      - .env
+      - .env 
     depends_on:
-      - api
-    restart: always
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - redis
 
+volumes:
+  pgdata: 

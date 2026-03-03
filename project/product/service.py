@@ -109,9 +109,8 @@ def read_products(db):
             "name": u.name,
             "brand": u.brand,
             "category":u.category,
-            "price" : u.price
-            "category":u.category,
-            "price" : u.price
+            "price" : u.price,
+            "category":u.category
         })
     
     return custom_response("Products retrieved successfully", 200, users_data)
