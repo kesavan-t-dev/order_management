@@ -64,6 +64,7 @@ def export_orders_to_csv():
         df.to_csv(output_path, index=False, encoding='utf-8')
         print(f"Successfully exported joined data to {output_path}")
         return {"message": f"Orders exported successfully to {output_path}"}
+    
     except pymssql.OperationalError:
         raise HTTPException(status_code=500, detail="Cannot reach SSMS. Check TCP/IP and Firewall.")
     except Exception as e:

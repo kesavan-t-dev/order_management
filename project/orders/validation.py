@@ -8,17 +8,6 @@ class ItemCreate(BaseModel):
     quantity: str
     total: str
 
-# class OrderCreate(BaseModel):
-#     customer_id: UUID
-#     items: List[ItemCreate]
-#     model_config = ConfigDict(from_attributes=True) 
-class ItemResponse(BaseModel):
-    product_id: UUID
-    quantity: int  
-    total: str
-
-    model_config = ConfigDict(from_attributes=True)
-
 class OrderData(BaseModel):
     customer_id: UUID
     order_status: Optional[str] = "Order placed"

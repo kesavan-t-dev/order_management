@@ -18,7 +18,7 @@ def create_order(db, data):
             order_id=new_order.id, 
             product_id=data.product_id,
             quantity=int(data.quantity), 
-            total=data.total
+            total=int(data.total)
         )
         db.add(new_item)
         db.commit() 

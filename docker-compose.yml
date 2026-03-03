@@ -49,11 +49,15 @@ services:
   scheduler:
     build: .
     working_dir: /app
-    command: python scheduler_script.py
+    command: python scheduler_export.py 
     volumes:
       - ./:/app
+      - ./CSV_Exports:/app/CSV_Exports 
     env_file:
-      - .env 
+      - .env
     depends_on:
-      - redis
+      - api
+    restart: always
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
