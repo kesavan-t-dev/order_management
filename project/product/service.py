@@ -42,15 +42,15 @@ def create_products(post,db):
     product_id = new_post.id
 
     new_id = str(uuid.uuid4()) 
-    conn = pymssql.connect(server="host.docker.internal\\SQLEXPRESS",
-         user='Mssql_db',
+    conn = pymssql.connect(server="host.docker.internal",
+         user='user2025',
          password='2025',
-         database='orders'
+         database='order_management'
       )
     conn_str = conn.cursor()
     query = "insert into product (id,product_name, product_brand,product_category,external_id) values(%s,%s,%s,%s,%s)"
 
-    conn_str.execute(query,(new_id,product_name,product_brand,product_category,product_id))
+    conn_str.execute(query,(new_id, product_name, product_brand, product_category, product_id))
     conn.commit()
     conn_str.close()
     conn.close()
@@ -60,24 +60,34 @@ def create_products(post,db):
 
 def read_products(db):
     posts = db.query(Product).filter(Product.is_active == True).all()
+
+    if len(posts) <= 0:
+        raise HTTPException(status_code=404, detail="No product exists")
+    
     users_data = []
     for u in posts:
         users_data.append({
             "name": u.name,
             "brand": u.brand,
-            "category":u.category
-
+            "category":u.category,
+            "price" : u.price
         })
     
     return custom_response("Products retrieved successfully", 200, users_data)
 
 
 def update_products(item_id,update,db):
+    updated = {}
     db_item = db.query(Product).filter(Product.id == item_id).first()
+    
+    if update.name == None and update.brand == None and update.category == None and update.price == None:
+        raise HTTPException(status_code=404, detail="Enter values to update")
+    
     if not db_item:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Product not found")
 
     for key, value in update.dict(exclude_unset=True).items():
+        updated[key] = value
         setattr(db_item, key, value)
 
 
@@ -86,11 +96,7 @@ def update_products(item_id,update,db):
     response_data = {
         "status_code": 200,
         "message": "Product Updated successfully",
-        "data": {
-           "name":db_item.name,
-           "brand":db_item.brand,
-           "category":db_item.category
-        }
+        "data": updated
     }
     update_data = update.dict(exclude_unset=True)
     fields = []
@@ -116,10 +122,10 @@ def update_products(item_id,update,db):
         sql_query = f"UPDATE product SET {', '.join(fields)} WHERE external_id=%s"
 
         conn = pymssql.connect(
-            server="host.docker.internal\\SQLEXPRESS",
-            user="Mssql_db",
+            server="host.docker.internal",
+            user="user2025",
             password="2025",
-            database="orders"
+            database="order_management"
         )
         cursor = conn.cursor()
         cursor.execute(sql_query, tuple(values))
@@ -141,4 +147,4 @@ def delete_products(item_id,db):
     db_item.is_active =False
     db.commit()
     db.refresh(db_item)
-    return {"message": "Product Deleted Successfully"}
+    return {"message": f"{db_item.name} Deleted Successfully"}

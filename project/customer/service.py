@@ -21,14 +21,23 @@ def customer_list(db):
     
 def new_customer(db, customer):
     try:
+        number = customer.number
+        zip_code = customer.zip
+
+        if not number.isnumeric():
+            return  Response(content="Special characters / Alphabets not allowed for mobile number", status_code=status.HTTP_400_BAD_REQUEST)
+        
+        if not zip_code.isnumeric():
+            return  Response(content="Special characters / Alphabets not allowed for zipcode", status_code=status.HTTP_400_BAD_REQUEST)
+        
         existing_customer = db.query(Customer).filter_by(email = customer.email, number = customer.number).first()
         if existing_customer:
             return Response(content="Customer already exists", status_code=status.HTTP_400_BAD_REQUEST)
-
+        
         new_customer = Customer(
-            name= customer.name,
-            email= customer.email,
-            number= customer.number,
+            name = customer.name,
+            email = customer.email,
+            number = customer.number,
             address = customer.address,
             city = customer.city,
             zip = customer.zip
@@ -55,6 +64,9 @@ def new_customer(db, customer):
 
 def update_customer(id: uuid, payload: dict, db):
     try:
+        if not payload.name  and not payload.email  and not payload.number  and not payload.address  and not payload.city  and not payload.zip :
+            return Response(content= 'Enter values to update', status_code = status.HTTP_400_BAD_REQUEST)
+        
         customer = db.query(Customer).filter_by(id = id).first()
         if customer:
             update_data = payload.model_dump(exclude_unset=True)
@@ -63,7 +75,9 @@ def update_customer(id: uuid, payload: dict, db):
                 setattr(customer, key, value)
             db.commit()
             db.refresh(customer)
-
+            if update_data['name'] == '' or update_data['number']:
+                return Response(content= 'empty value not accepted', status_code = status.HTTP_400_BAD_REQUEST)
+               
             if 'name' not in update_data:
                 name = customer.name 
             else:
