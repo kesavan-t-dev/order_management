@@ -2,18 +2,16 @@ from .validation import *
 from .models import Customer
 from fastapi import  status, Response
 import uuid
-from project.olap.dim_customer.service import *
+
 def customer_list(db):
     try:
         customers = db.query(Customer).filter_by(is_active = True).all()
         if len(customers) > 0:
-            # await export()
             return {
                 "message": "list of customers",
                 "properties": customers,
                 "status_code" : 200
             }
-            
         return Response(content = 'No Customer exists', status_code = status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         print(e)
@@ -47,8 +45,6 @@ def new_customer(db, customer):
             'city': new_customer.city,
             'zip': new_customer.zip,
         }
-        dim_create(new_customer.id, new_customer.name, new_customer.number)
-        
         return {"message": "customer created successfully", "properties": data, "status_code" : 200}
     except Exception as e:
         return Response(content=str(e), status_code=status.HTTP_400_BAD_REQUEST)
@@ -56,25 +52,14 @@ def new_customer(db, customer):
 def update_customer(id: uuid, payload: dict, db):
     try:
         customer = db.query(Customer).filter_by(id = id).first()
+        print(customer)
         if customer:
             update_data = payload.model_dump(exclude_unset=True)
             for key, value in update_data.items():
                 print(key, value)
                 setattr(customer, key, value)
             db.commit()
-            db.refresh(customer)
-
-            if 'name' not in update_data:
-                name = customer.name 
-            else:
-                name = update_data['name']
-                
-            if 'number' not in update_data:
-                number = customer.number
-            else:
-                number = update_data['number']
-
-            dim_update(id, name, number)             
+            db.close()                  
             return {
                 "message": "customer updated successfully",
                 "properties": update_data,
