@@ -95,13 +95,23 @@ def create_products(post, db):
 
 def read_products(db):
     posts = db.query(Product).filter(Product.is_active == True).all()
+
+    if len(posts) <= 0:
+        raise HTTPException(status_code=404, detail="No product exists")
+    
+
+    if len(posts) <= 0:
+        raise HTTPException(status_code=404, detail="No product exists")
+    
     users_data = []
     for u in posts:
         users_data.append({
             "name": u.name,
             "brand": u.brand,
-            "category":u.category
-
+            "category":u.category,
+            "price" : u.price
+            "category":u.category,
+            "price" : u.price
         })
     
     return custom_response("Products retrieved successfully", 200, users_data)
@@ -135,7 +145,16 @@ def update_products(item_id, update, db):
 
     # Fetch the product
     db_item = db.query(Product).filter(Product.id == item_id).first()
+    
+    if update.name == None and update.brand == None and update.category == None and update.price == None:
+        raise HTTPException(status_code=404, detail="Enter values to update")
+    
+    
+    if update.name == None and update.brand == None and update.category == None and update.price == None:
+        raise HTTPException(status_code=404, detail="Enter values to update")
+    
     if not db_item:
+        raise HTTPException(status_code=404, detail="Product not found")
         raise HTTPException(status_code=404, detail="Product not found")
 
     # Apply updates only for provided fields
@@ -143,9 +162,10 @@ def update_products(item_id, update, db):
         update_data = update.dict(exclude_unset=True) if hasattr(update, "dict") else dict(update)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid update data: {str(e)}")
-
+    updated = {}
     for key, value in update_data.items():
         if hasattr(db_item, key):
+            updated[key] = value
             setattr(db_item, key, value)
 
     # Commit changes
@@ -160,11 +180,7 @@ def update_products(item_id, update, db):
     response_data = {
         "status_code": 200,
         "message": "Product updated successfully",
-        "data": {
-            "name": db_item.name,
-            "brand": db_item.brand,
-            "category": db_item.category
-        }
+        "data": updated
     }
 
     # Trigger async task safely
@@ -189,7 +205,7 @@ def delete_products(item_id,db):
     db_item.is_active =False
     db.commit()
     db.refresh(db_item)
-    return {"message": "Product Deleted Successfully"}
+    return {"message": f"{db_item.name} Deleted Successfully"}
 
 
 
