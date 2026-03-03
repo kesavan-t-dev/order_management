@@ -3,6 +3,7 @@ from .models import Customer
 from fastapi import  status, Response
 import uuid
 from project.olap.dim_customer.service import *
+from app.customer_worker import insert_customer_to_sql,update_customer_to_sql
 def customer_list(db):
     try:
         customers = db.query(Customer).filter_by(is_active = True).all()
@@ -47,7 +48,7 @@ def new_customer(db, customer):
             'city': new_customer.city,
             'zip': new_customer.zip,
         }
-        dim_create(new_customer.id, new_customer.name, new_customer.number)
+        insert_customer_to_sql.delay(new_customer.id, new_customer.name, new_customer.number,new_customer.email)
         
         return {"message": "customer created successfully", "properties": data, "status_code" : 200}
     except Exception as e:
@@ -64,17 +65,17 @@ def update_customer(id: uuid, payload: dict, db):
             db.commit()
             db.refresh(customer)
 
-            if 'name' not in update_data:
-                name = customer.name 
-            else:
-                name = update_data['name']
+            # if 'name' not in update_data:
+            #     name = customer.name 
+            # else:
+            #     name = update_data['name']
                 
-            if 'number' not in update_data:
-                number = customer.number
-            else:
-                number = update_data['number']
+            # if 'number' not in update_data:
+            #     number = customer.number
+            # else:
+            #     number = update_data['number']
 
-            dim_update(id, name, number)             
+            update_customer_to_sql(id, update_data)             
             return {
                 "message": "customer updated successfully",
                 "properties": update_data,
