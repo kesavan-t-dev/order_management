@@ -1,8 +1,6 @@
 from fastapi.responses import JSONResponse
 from .models import Product
-from fastapi import  HTTPException, status
-import pymssql
-import uuid
+from fastapi import  HTTPException
 from app.product_worker import insert_product_to_sql,update_product_to_sql
 
 
@@ -13,50 +11,6 @@ def custom_response(message: str, status_code: int, properties: any):
         "properties": properties
     }
 
-# def create_products(post,db):
-#     existing_post = db.query(Product).filter(Product.name == post.name).first()
-#     if existing_post:
-#         return JSONResponse(
-#             content={
-#                 "status_code": 400,
-#                 "message": f"Product '{post.name}' already exists.",
-#             },
-#             status_code=400
-#         )
-
-#     new_post = Product(**post.dict())    
-#     db.add(new_post)
-#     db.commit()
-#     db.refresh(new_post)
-#     response_data = {
-#         "status_code": 200,
-#         "message": "Product Created successfully",
-#         "data": {
-#            "name":new_post.name
-
-#         }
-#     }
-
-#     product_name = new_post.name
-#     product_brand = new_post.brand
-#     product_category = new_post.category
-#     product_id = new_post.id
-
-#     new_id = str(uuid.uuid4()) 
-#     conn = pymssql.connect(server="host.docker.internal\\SQLEXPRESS",
-#          user='Mssql_db',
-#          password='2025',
-#          database='orders'
-#       )
-#     conn_str = conn.cursor()
-#     query = "insert into product (id,product_name, product_brand,product_category,external_id) values(%s,%s,%s,%s,%s)"
-
-#     conn_str.execute(query,(new_id,product_name,product_brand,product_category,product_id))
-#     conn.commit()
-#     conn_str.close()
-#     conn.close()
-
-#     return JSONResponse(content=response_data, status_code=200)
 
 def create_products(post, db):
     existing_post = db.query(Product).filter(Product.name == post.name).first()
@@ -77,7 +31,7 @@ def create_products(post, db):
 
     # Prepare response
     response_data = {
-        "status_code": 200,
+        "status_code": 201,
         "message": "Product Created successfully",
         "data": {"name": new_post.name}
     }
@@ -98,11 +52,7 @@ def read_products(db):
 
     if len(posts) <= 0:
         raise HTTPException(status_code=404, detail="No product exists")
-    
 
-    if len(posts) <= 0:
-        raise HTTPException(status_code=404, detail="No product exists")
-    
     users_data = []
     for u in posts:
         users_data.append({
@@ -110,37 +60,12 @@ def read_products(db):
             "brand": u.brand,
             "category":u.category,
             "price" : u.price,
-            "category":u.category,
-          
+            "category":u.category
+
         })
     
     return custom_response("Products retrieved successfully", 200, users_data)
 
-
-# def update_products(item_id,update,db):
-#     db_item = db.query(Product).filter(Product.id == item_id).first()
-#     if not db_item:
-#         raise HTTPException(status_code=404, detail="User not found")
-
-#     for key, value in update.dict(exclude_unset=True).items():
-#         setattr(db_item, key, value)
-
-
-#     db.commit()
-#     db.refresh(db_item)
-#     response_data = {
-#         "status_code": 200,
-#         "message": "Product Updated successfully",
-#         "data": {
-#            "name":db_item.name,
-#            "brand":db_item.brand,
-#            "category":db_item.category
-#         }
-#     }
-#     update_data = update.dict(exclude_unset=True)
-
-#     update_product_to_sql.delay(update_data,db_item,item_id)
-#     return JSONResponse(content=response_data, status_code=200)
 def update_products(item_id, update, db):
 
     # Fetch the product
@@ -155,7 +80,7 @@ def update_products(item_id, update, db):
     
     if not db_item:
         raise HTTPException(status_code=404, detail="Product not found")
-        raise HTTPException(status_code=404, detail="Product not found")
+
 
     # Apply updates only for provided fields
     try:
@@ -178,7 +103,7 @@ def update_products(item_id, update, db):
 
     # Prepare response
     response_data = {
-        "status_code": 200,
+        "status_code": 201,
         "message": "Product updated successfully",
         "data": updated
     }
@@ -188,7 +113,7 @@ def update_products(item_id, update, db):
         
         update_product_to_sql.delay(update_data, item_id)
     except Exception as e:
-        # Log the error but don't block the API response
+
         print(f"Async task failed: {e}")
 
     return JSONResponse(content=response_data, status_code=200)
