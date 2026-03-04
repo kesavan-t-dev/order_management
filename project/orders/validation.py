@@ -2,11 +2,12 @@ from pydantic import BaseModel, ConfigDict
 from uuid import UUID
 from typing import Optional
 
-
 class ItemCreate(BaseModel):
     product_id: UUID
     quantity: str
     total: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 class OrderData(BaseModel):
     customer_id: UUID

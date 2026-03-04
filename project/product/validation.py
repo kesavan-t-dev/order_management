@@ -36,5 +36,5 @@ class Create_Product(BaseModel):
     brand : str
     category : str
     price : str
-   
+
     model_config = ConfigDict(arbitrary_types_allowed=True)

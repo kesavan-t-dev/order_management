@@ -12,9 +12,12 @@ def export_job():
     conn = None
     try:
         now = datetime.now(timezone('Asia/Kolkata'))
-        print(now)
         lookback = now - timedelta(minutes=3) 
         
+        file_ts = now.strftime("%Y-%m-%d_%H-%M-%S")
+        sql_ts = lookback.strftime("%Y-%m-%d %H:%M:%S")
+
+        print(f"[{file_ts}] Exporting records from {sql_ts} to {now.strftime('%H:%M:%S')}")
         file_ts = now.strftime("%Y-%m-%d_%H-%M-%S")
         sql_ts = lookback.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -47,6 +50,7 @@ def export_job():
 
         if not rows:
             print(f"No new records found since {sql_ts}.")
+
             return
 
         columns = [col[0] for col in cursor.description]
@@ -56,8 +60,8 @@ def export_job():
         output_filename = f'orders_{file_ts}_data.csv'
         output_path = output_folder / output_filename
 
-        df = pd.DataFrame([list(r) for r in rows], columns=columns)
-        df.to_csv(output_path, index=False, encoding='utf-8')
+        df = pd.DataFrame([list(r) for r in rows], columns = columns)
+        df.to_csv(output_path, index = False, encoding = 'utf-8')
         
         print(f"Successfully saved {len(df)} records to {output_path}")
 

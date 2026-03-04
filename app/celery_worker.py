@@ -9,7 +9,6 @@ celery_app = Celery(
     backend=backend_url
 )
 
-# Auto-discover tasks from these modules
 celery_app.autodiscover_tasks([
    "app.product_worker",
    "app.customer_worker",
