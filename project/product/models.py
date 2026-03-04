@@ -4,6 +4,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from db import Base
 import uuid
 
+
+
 class Product(Base):
     __tablename__ = 'product'
 

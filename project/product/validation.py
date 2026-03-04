@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy.dialects.postgresql import UUID
+from typing import Any
 import uuid
 
 class Product_serializer(BaseModel):
@@ -23,7 +24,7 @@ class Product_update_serializer(BaseModel):
 class Product_response(BaseModel):
  
     message: str 
-    properties: any
+    properties: Any
     status_code: int
 
     model_config = ConfigDict(arbitrary_types_allowed=True)

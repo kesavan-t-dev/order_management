@@ -76,7 +76,7 @@ def update_customer(id: uuid, payload: dict, db):
             db.commit()
             db.refresh(customer)
             
-            update_customer_to_sql(id,update_data)             
+            update_customer_to_sql.delay(id, update_data)             
             return {
                 "message": "customer updated successfully",
                 "properties": update_data,

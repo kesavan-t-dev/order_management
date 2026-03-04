@@ -28,7 +28,7 @@ def create_products(post, db):
     db.refresh(new_post)
 
     response_data = {
-        "status_code": 200,
+        "status_code": 201,
         "message": "Product Created successfully",
         "data": {"name": new_post.name}
     }
@@ -58,6 +58,7 @@ def read_products(db):
             "category":u.category,
             "price" : u.price,
             "category":u.category
+
         })
     return custom_response("Products retrieved successfully", 200, users_data)
 
@@ -88,7 +89,7 @@ def update_products(item_id, update, db):
         raise HTTPException(status_code = 500, detail = f"Database update failed: {str(e)}")
 
     response_data = {
-        "status_code": 200,
+        "status_code": 201,
         "message": "Product updated successfully",
         "data": updated
     }

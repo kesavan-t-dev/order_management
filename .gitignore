@@ -1,8 +1,10 @@
 .venv/
-.env
+.env/
 __pycache__/
 *.pyc
 alembic/
 CSV_Exports/
 alembic.ini
-project/olap/
+olap/
+dp.py
+

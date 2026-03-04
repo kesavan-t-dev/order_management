@@ -9,10 +9,10 @@ def insert_order_to_sql(customer_id, product_id, order_id, quantity, total):
 
     try:
         conn = pymssql.connect(
-            server = "host.docker.internal",
-            user = "user2025",
+            server = "host.docker.internal\\SQLEXPRESS",
+            user = "Mssql_db",
             password = "2025",
-            database = "order_management"
+            database = "orders"
         )
         cursor = conn.cursor()
         new_id = str(uuid.uuid4())

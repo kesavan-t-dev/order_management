@@ -18,18 +18,22 @@ def export_job():
         sql_ts = lookback.strftime("%Y-%m-%d %H:%M:%S")
 
         print(f"[{file_ts}] Exporting records from {sql_ts} to {now.strftime('%H:%M:%S')}")
+        file_ts = now.strftime("%Y-%m-%d_%H-%M-%S")
+        sql_ts = lookback.strftime("%Y-%m-%d %H:%M:%S")
+
+        print(f"[{file_ts}] Exporting records from {sql_ts} to {now.strftime('%H:%M:%S')}")
 
         conn = pymssql.connect(
-            server="host.docker.internal",
-            user="user2025",
+            server="host.docker.internal\\SQLEXPRESS",
+            user="Mssql_db",
             password="2025",
-            database="order_management",
-            timeout=10
+            database="orders"
         )
         cursor = conn.cursor()
 
         query = """
         SELECT 
+            o.order_id,
             p.product_name,
             c.customer_name,
             o.quantity,
@@ -46,6 +50,7 @@ def export_job():
 
         if not rows:
             print(f"No new records found since {sql_ts}.")
+
             return
 
         columns = [col[0] for col in cursor.description]

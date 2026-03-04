@@ -6,7 +6,7 @@ import uuid
 from sqlalchemy.dialects.postgresql import UUID
 
 class Order(Base):
-    __tablename__ = 'orders'
+    __tablename__ = 'order'
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     customer_id = Column(UUID(as_uuid=True), ForeignKey("customer.id", ondelete="CASCADE"))
@@ -21,7 +21,7 @@ class Order_items(Base):
     __tablename__ = 'order_items'
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    order_id = Column(UUID(as_uuid=True), ForeignKey("orders.id", ondelete="CASCADE"), nullable=False)
+    order_id = Column(UUID(as_uuid=True), ForeignKey("order.id", ondelete="CASCADE"), nullable=False)
     product_id = Column(UUID(as_uuid=True), ForeignKey("product.id", ondelete="CASCADE"), nullable=False)
     quantity = Column(Integer, default=1) 
     total = Column(String) 
