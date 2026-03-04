@@ -18,4 +18,5 @@ class Product(Base):
     update_at = Column(DateTime, default = datetime.now(), onupdate= datetime.now())
     is_active = Column(Boolean, default = True)
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+
+

@@ -1,4 +1,3 @@
-from pydantic import ConfigDict
 from sqlalchemy import Column, String, Boolean, DateTime
 from datetime import datetime
 import uuid
@@ -18,5 +17,3 @@ class Customer(Base):
     created_at = Column(DateTime, default = datetime.now())
     update_at = Column(DateTime, default = datetime.now(), onupdate= datetime.now())
     is_active = Column(Boolean, default = True)
-
-    

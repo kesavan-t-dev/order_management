@@ -48,7 +48,7 @@ services:
   scheduler:
     build: .
     working_dir: /app
-    command: python scheduler_script.py
+    command: python scheduler_export.py
     volumes:
       - ./:/app
     env_file:

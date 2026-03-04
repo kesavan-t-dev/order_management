@@ -5,4 +5,3 @@ __pycache__/
 alembic/
 CSV_Exports/
 alembic.ini
-db.py
