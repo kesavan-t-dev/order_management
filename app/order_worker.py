@@ -4,16 +4,15 @@ import pymssql
 import uuid
 
 
-@celery_app.task(name="order_worker.insert_order_to_sql")
+@celery_app.task(name = "order_worker.insert_order_to_sql")
 def insert_order_to_sql(customer_id, product_id, order_id, quantity, total):
-    print("hi")
+
     try:
         conn = pymssql.connect(
-            server='host.docker.internal', 
-            port=1433,
-            user='sa2026',
-            password='2026',   
-            database='order_management'
+            server = "host.docker.internal",
+            user = "user2025",
+            password = "2025",
+            database = "order_management"
         )
         cursor = conn.cursor()
         new_id = str(uuid.uuid4())

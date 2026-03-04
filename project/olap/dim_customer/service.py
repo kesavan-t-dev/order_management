@@ -1,7 +1,6 @@
 # from .models import *
 
 # def create():
-    
 #     # cur.execute('select * from customer')
 #     create = '''create table customer(
 #                     id UNIQUEIDENTIFIER DEFAULT NEWID(),

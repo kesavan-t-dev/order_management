@@ -4,19 +4,18 @@ import pymssql
 import uuid
 
 @celery_app.task(name="customer_worker.insert_customer_to_sql")
-def insert_customer_to_sql(id, name, number,email):
-    print("hi")
+def insert_customer_to_sql(id, name, number, email):
     try:
         conn = pymssql.connect(
-            server="host.docker.internal\\SQLEXPRESS",
-            user="Mssql_db",
-            password="2025",
-            database="orders"
+            server = "host.docker.internal",
+            user = "user2025",
+            password = "2025",
+            database = "order_management"
         )
         cursor = conn.cursor()
         new_id = str(uuid.uuid4())
         query = """
-            insert into customer (id,customer_name, customer_number,email,external_id) 
+            insert into customer (id, customer_name, customer_number, email, external_id) 
             VALUES (%s, %s, %s, %s, %s)
         """
         cursor.execute(query, (new_id,  name, number,email,id))
@@ -29,7 +28,7 @@ def insert_customer_to_sql(id, name, number,email):
         if conn:
             conn.close()
 
-@celery_app.task(name="customer_worker.update_customer_to_sql")
+@celery_app.task(name = "customer_worker.update_customer_to_sql")
 def update_customer_to_sql(id,update_data):
     try:
         fields = []
@@ -37,28 +36,28 @@ def update_customer_to_sql(id,update_data):
 
         if "name" in update_data:
             name = update_data["name"]
-            fields.append("customer_name=%s")
+            fields.append("name = %s")
             values.append(name)
 
         if "number" in update_data:
             brand = update_data["number"]
-            fields.append("customer_number=%s")
+            fields.append("number = %s")
             values.append(brand)
 
         if "email" in update_data:
             category = update_data["email"]
-            fields.append("email=%s")
+            fields.append("email = %s")
             values.append(category)
 
         if fields:  
             values.append(str(id))
-            sql_query = f"UPDATE customer SET {', '.join(fields)} WHERE external_id=%s"
+            sql_query = f"UPDATE customer SET {', '.join(fields)} WHERE customer_id = %s"
 
             conn = pymssql.connect(
-                server="host.docker.internal\\SQLEXPRESS",
-                user="Mssql_db",
-                password="2025",
-                database="orders"
+                server = "host.docker.internal",
+                user = "user2025",
+                password = "2025",
+                database = "order_management"
             )
             cursor = conn.cursor()
             cursor.execute(sql_query, tuple(values))
