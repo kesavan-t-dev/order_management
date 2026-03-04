@@ -1,7 +1,5 @@
 import pandas as pd
 import pymssql
-import os
-import pytz
 from datetime import datetime, timedelta
 from pytz import timezone
 from pathlib import Path
@@ -10,28 +8,21 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def get_kolkata_time():
-    local_tz = timezone('Asia/Kolkata')
-    return datetime.now(local_tz)
-
 def export_job():
     conn = None
     try:
-        now_kolkata = datetime.now(timezone('Asia/Kolkata'))
-        now_utc = datetime.now(pytz.utc)
+        now = datetime.now(timezone('Asia/Kolkata'))
+        lookback = now - timedelta(minutes=3) 
         
-        lookback_utc = now_utc - timedelta(minutes=3)
-        
-        file_ts = now_kolkata.strftime("%Y-%m-%d_%H-%M-%S")
-        sql_ts = lookback_utc.strftime("%Y-%m-%d %H:%M:%S")
+        file_ts = now.strftime("%Y-%m-%d_%H-%M-%S")
+        sql_ts = lookback.strftime("%Y-%m-%d %H:%M:%S")
 
-        print(f"Searching DB for records since {file_ts}")
+        print(f"[{file_ts}] Exporting records from {sql_ts} to {now.strftime('%H:%M:%S')}")
 
         conn = pymssql.connect(
             server="host.docker.internal",
-            port=1433,
-            user="sa2026",
-            password="2026",
+            user="user2025",
+            password="2025",
             database="order_management",
             timeout=10
         )
@@ -54,7 +45,7 @@ def export_job():
         rows = cursor.fetchall()
 
         if not rows:
-            print(f"No records found in DB after{file_ts}")
+            print(f"No new records found since {sql_ts}.")
             return
 
         columns = [col[0] for col in cursor.description]
@@ -64,8 +55,8 @@ def export_job():
         output_filename = f'orders_{file_ts}_data.csv'
         output_path = output_folder / output_filename
 
-        df = pd.DataFrame([list(r) for r in rows], columns=columns)
-        df.to_csv(output_path, index=False, encoding='utf-8')
+        df = pd.DataFrame([list(r) for r in rows], columns = columns)
+        df.to_csv(output_path, index = False, encoding = 'utf-8')
         
         print(f"Successfully saved {len(df)} records to {output_path}")
 
@@ -77,8 +68,8 @@ def export_job():
 
 scheduler = BlockingScheduler()
 scheduler.add_job(export_job, 'cron', minute='*/3')
+print("Scheduler started. Running every 3 minutes...")
 
-print(f"Scheduler started")
 try:
     scheduler.start()
 except (KeyboardInterrupt, SystemExit):

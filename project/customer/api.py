@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from .service import *
-from .validation import *
+from .service import customer_list, new_customer, update_customer, remove_customer
+from .validation import Customer_response, Create_Customer, Customer_update_serializer
 from db import get_db
 
 customer_route = APIRouter(
@@ -9,7 +9,6 @@ customer_route = APIRouter(
     tags= ['customer'],
     responses={404: {"description": "Not found"}}
 )
-
 
 @customer_route.get('/customer_list', response_model= Customer_response)
 def get_customer(db: Session = Depends(get_db)):
