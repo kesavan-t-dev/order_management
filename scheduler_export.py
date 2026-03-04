@@ -24,10 +24,10 @@ def export_job():
         print(f"[{file_ts}] Exporting records from {sql_ts} to {now.strftime('%H:%M:%S')}")
 
         conn = pymssql.connect(
-            server="host.docker.internal\\SQLEXPRESS",
-            user="Mssql_db",
-            password="2025",
-            database="orders"
+            server = "host.docker.internal\\SQLEXPRESS",
+            user = "Mssql_db",
+            password = "2025",
+            database = "orders"
         )
         cursor = conn.cursor()
 
