@@ -6,7 +6,6 @@ import uuid
 
 @celery_app.task(name="order_worker.insert_order_to_sql")
 def insert_order_to_sql(customer_id, product_id, order_id, quantity, total):
-    print("hi")
     try:
         conn = pymssql.connect(
             server='host.docker.internal', 

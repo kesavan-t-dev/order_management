@@ -2,7 +2,6 @@ from .validation import *
 from .models import Customer
 from fastapi import  status, Response
 import uuid
-from project.olap.dim_customer.service import *
 from app.customer_worker import insert_customer_to_sql,update_customer_to_sql
 def customer_list(db):
     try:

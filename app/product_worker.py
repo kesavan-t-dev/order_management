@@ -8,10 +8,11 @@ def insert_product_to_sql(name, brand, category, id):
     print("hi")
     try:
         conn = pymssql.connect(
-            server="host.docker.internal\\SQLEXPRESS",
-            user="Mssql_db",
-            password="2025",
-            database="orders"
+            server='host.docker.internal', 
+            port=1433,
+            user='sa2026',
+            password='2026',   
+            database='order_management'
         )
         cursor = conn.cursor()
         new_id = str(uuid.uuid4())
@@ -55,10 +56,11 @@ def update_product_to_sql(update_data,item_id):
             sql_query = f"UPDATE product SET {', '.join(fields)} WHERE external_id=%s"
 
             conn = pymssql.connect(
-                server="host.docker.internal\\SQLEXPRESS",
-                user="Mssql_db",
-                password="2025",
-                database="orders"
+            server='host.docker.internal', 
+            port=1433,
+            user='sa2026',
+            password='2026',   
+            database='order_management'
             )
             cursor = conn.cursor()
             cursor.execute(sql_query, tuple(values))

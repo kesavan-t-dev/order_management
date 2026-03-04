@@ -8,10 +8,11 @@ def insert_customer_to_sql(id, name, number,email):
     print("hi")
     try:
         conn = pymssql.connect(
-            server="host.docker.internal\\SQLEXPRESS",
-            user="Mssql_db",
-            password="2025",
-            database="orders"
+            server='host.docker.internal', 
+            port=1433,
+            user='sa2026',
+            password='2026',   
+            database='order_management'
         )
         cursor = conn.cursor()
         new_id = str(uuid.uuid4())
@@ -55,10 +56,11 @@ def update_customer_to_sql(id,update_data):
             sql_query = f"UPDATE customer SET {', '.join(fields)} WHERE external_id=%s"
 
             conn = pymssql.connect(
-                server="host.docker.internal\\SQLEXPRESS",
-                user="Mssql_db",
-                password="2025",
-                database="orders"
+                server='host.docker.internal', 
+                port=1433,
+                user='sa2026',
+                password='2026',   
+                database='order_management'
             )
             cursor = conn.cursor()
             cursor.execute(sql_query, tuple(values))

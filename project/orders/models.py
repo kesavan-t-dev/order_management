@@ -12,8 +12,8 @@ class Order(Base):
     customer_id = Column(UUID(as_uuid=True), ForeignKey("customer.id", ondelete="CASCADE"))
     order_date = Column(DateTime, default=datetime.now)
     order_status = Column(String(50), nullable=False, default='Order placed')
-    created_at = Column(DateTime, default=datetime.now)
-    update_at = Column(DateTime, default=datetime.now, onupdate=datetime.now)
+    created_at = Column(DateTime, default=datetime.now())
+    update_at = Column(DateTime, default=datetime.now(), onupdate=datetime.now())
     
     items = relationship("Order_items", back_populates="order", lazy="joined")
 
