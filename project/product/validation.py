@@ -31,7 +31,7 @@ class Product_response(BaseModel):
 
 class Create_Product(BaseModel):
     
-    id : UUID = uuid.uuid4()
+    id : UUID = uuid.uuid4
     name : str
     brand : str
     category : str
