@@ -4,6 +4,8 @@ from sqlalchemy.dialects.postgresql import UUID
 from db import Base
 import uuid
 
+from project.orders.models import ist_now
+
 
 
 class Product(Base):
@@ -14,8 +16,8 @@ class Product(Base):
     brand = Column(String(100))
     category = Column(String(100))
     price = Column(String(10), nullable= False)
-    created_at = Column(DateTime, default = datetime.now())
-    update_at = Column(DateTime, default = datetime.now(), onupdate= datetime.now())
+    created_at = Column(DateTime(timezone=False), default=ist_now)
+    updated_at = Column(DateTime(timezone=False), default=ist_now, onupdate=ist_now)
     is_active = Column(Boolean, default = True)
 
 

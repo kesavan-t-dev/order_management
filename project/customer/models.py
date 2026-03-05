@@ -4,6 +4,8 @@ from datetime import datetime
 from db import Base
 import uuid
 
+from project.orders.models import ist_now
+
 class Customer(Base):
     __tablename__ = 'customer'
 
@@ -14,6 +16,6 @@ class Customer(Base):
     address = Column(String(256), nullable = False)
     city = Column(String(50), nullable = False)
     zip = Column(String(6), nullable = False)
-    created_at = Column(DateTime, default = datetime.now())
-    update_at = Column(DateTime, default = datetime.now(), onupdate= datetime.now())
+    created_at = Column(DateTime(timezone=False), default=ist_now)
+    updated_at = Column(DateTime(timezone=False), default=ist_now, onupdate=ist_now)
     is_active = Column(Boolean, default = True)

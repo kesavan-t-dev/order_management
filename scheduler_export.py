@@ -18,16 +18,16 @@ def export_job():
         sql_ts = lookback.strftime("%Y-%m-%d %H:%M:%S")
 
         print(f"[{file_ts}] Exporting records from {sql_ts} to {now.strftime('%H:%M:%S')}")
-        file_ts = now.strftime("%Y-%m-%d_%H-%M-%S")
-        sql_ts = lookback.strftime("%Y-%m-%d %H:%M:%S")
+        # file_ts = now.strftime("%Y-%m-%d_%H-%M-%S")
+        # sql_ts = lookback.strftime("%Y-%m-%d %H:%M:%S")
 
-        print(f"[{file_ts}] Exporting records from {sql_ts} to {now.strftime('%H:%M:%S')}")
+        # print(f"[{file_ts}] Exporting records from {sql_ts} to {now.strftime('%H:%M:%S')}")
 
         conn = pymssql.connect(
-            server="host.docker.internal\\SQLEXPRESS",
-            user="Mssql_db",
-            password="2025",
-            database="orders"
+            server = "host.docker.internal",
+            user = "sa2026",
+            password = "2026",
+            database = "order_management"
         )
         cursor = conn.cursor()
 

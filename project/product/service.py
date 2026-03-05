@@ -116,6 +116,3 @@ def delete_products(item_id,db):
     return {"message": f"{db_item.name} Deleted Successfully"}
 
 
-
-
-

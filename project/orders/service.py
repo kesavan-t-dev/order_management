@@ -1,6 +1,6 @@
 from .models import Order, Order_items
 from app.order_worker import insert_order_to_sql
-
+from fastapi import status
 
 def create_order(db, data):
     try:
@@ -29,7 +29,7 @@ def create_order(db, data):
         )
         return {
             "message": "Order created successfully",
-            "status_code": 201,
+            "status_code": status.HTTP_201_CREATED,
             "data": {
                 "customer_id": new_order.customer_id,
                 "order_status": new_order.order_status,
