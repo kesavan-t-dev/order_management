@@ -51,7 +51,7 @@ def update_customer_to_sql(id,update_data):
 
         if fields:  
             values.append(str(id))
-            sql_query = f"UPDATE customer SET {', '.join(fields)} WHERE customer_id = %s"
+            sql_query = f"UPDATE customer SET {', '.join(fields)} WHERE external_id = %s"
 
             conn = pymssql.connect(
                 server = "host.docker.internal",
