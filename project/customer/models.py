@@ -2,6 +2,7 @@ from sqlalchemy import Column, String, Boolean, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 from db import Base
+from project.orders.models import ist_now
 import uuid
 
 class Customer(Base):
@@ -14,6 +15,6 @@ class Customer(Base):
     address = Column(String(256), nullable = False)
     city = Column(String(50), nullable = False)
     zip = Column(String(6), nullable = False)
-    created_at = Column(DateTime, default = datetime.now())
-    update_at = Column(DateTime, default = datetime.now(), onupdate= datetime.now())
+    created_at = Column(DateTime(timezone=False), default=ist_now)
+    updated_at = Column(DateTime(timezone=False), default=ist_now, onupdate=ist_now)
     is_active = Column(Boolean, default = True)

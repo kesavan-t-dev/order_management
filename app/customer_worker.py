@@ -36,12 +36,12 @@ def update_customer_to_sql(id,update_data):
 
         if "name" in update_data:
             name = update_data["name"]
-            fields.append("name = %s")
+            fields.append("customer_name = %s")
             values.append(name)
 
         if "number" in update_data:
             brand = update_data["number"]
-            fields.append("number = %s")
+            fields.append("customer_number = %s")
             values.append(brand)
 
         if "email" in update_data:
@@ -51,7 +51,7 @@ def update_customer_to_sql(id,update_data):
 
         if fields:  
             values.append(str(id))
-            sql_query = f"UPDATE customer SET {', '.join(fields)} WHERE customer_id = %s"
+            sql_query = f"UPDATE customer SET {', '.join(fields)} WHERE external_id = %s"
 
             conn = pymssql.connect(
                 server = "host.docker.internal",
